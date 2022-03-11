@@ -11,13 +11,54 @@
     </tr>
   </thead>
 
+
+
+<thead>
+    <tr>
+      <% tweet=Tweet.new%>
+      <%= form_with(model: tweet) do |form| %>
+  <% if tweet.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(tweet.errors.count, "error") %> prohibited this tweet from being saved:</h2>
+
+      <ul>
+        <% tweet.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :author %>
+    <%= form.text_field :author %>
+  </div>
+
+  <div class="field">
+    <%= form.label :content %>
+    <%= form.text_area :content %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>
+    </tr>
+  </thead>
+
+
+
   <tbody>
+    <% fecha_ant = nil %>
     <% @tweets.each do |tweet| %>
+     <tr>
+     <td><%= tweet.created_at.strftime("...... %A ,%B %d, %Y") unless fecha_ant == tweet.created_at.to_date %></td> 
+     </tr>
+      <% fecha_ant = tweet.created_at.to_date %>
       <tr>
         <td><%= tweet.author %></td>
         <td><%= tweet.content %></td>
         <td><%= tweet.likes %></td>
-        <td><%= tweet.created_at %></td>
         <td><%= link_to 'Show', tweet %></td>
         <td><%= link_to 'Edit', edit_tweet_path(tweet) %></td>
         <td><%= link_to 'Destroy', tweet, method: :delete, data: { confirm: 'Are you sure?' } %></td>
@@ -28,5 +69,6 @@
 </table>
 
 <br>
+
 
 <%= link_to 'New Tweet', new_tweet_path %>
